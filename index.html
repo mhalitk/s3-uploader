@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S3 File Uploader</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>S3 File Uploader</h1>
+        <div class="upload-container">
+            <div class="form-group">
+                <label for="presignedUrl">Presigned URL:</label>
+                <input type="url" id="presignedUrl" placeholder="https://your-bucket.s3.amazonaws.com/..." required>
+            </div>
+            <div class="form-group">
+                <label for="fileInput" class="file-upload-label">
+                    <span id="fileName">Choose a file or drag it here</span>
+                    <input type="file" id="fileInput" style="display: none;">
+                </label>
+            </div>
+            <button id="uploadBtn" class="upload-btn" disabled>Upload to S3</button>
+            <div id="progressContainer" class="progress-container" style="display: none;">
+                <div id="progressBar" class="progress-bar"></div>
+                <span id="progressText">0%</span>
+            </div>
+            <div id="status" class="status"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
