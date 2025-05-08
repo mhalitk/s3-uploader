@@ -1,5 +1,9 @@
 # S3 Presigned URL Uploader
 
+## 🌐 Live Demo
+
+Try the hosted app here: [https://mhalitk.github.io/s3-uploader/](https://mhalitk.github.io/s3-uploader/)
+
 A simple, user-friendly web application for uploading files directly to Amazon S3 using presigned URLs. This is ideal for securely allowing uploads to your S3 bucket without exposing AWS credentials or needing backend infrastructure.
 
 ---
