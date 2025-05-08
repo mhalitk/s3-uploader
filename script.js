@@ -3,12 +3,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileNameSpan = document.getElementById('fileName');
     const uploadBtn = document.getElementById('uploadBtn');
     const presignedUrlInput = document.getElementById('presignedUrl');
+    const presignedUrlShareInput = document.getElementById('presignedUrlShare');
     const progressContainer = document.getElementById('progressContainer');
     const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
     const statusDiv = document.getElementById('status');
+    const generateLinkBtn = document.getElementById('generateLinkBtn');
+    const sharableLinkInput = document.getElementById('sharableLink');
+    const tabUpload = document.getElementById('tab-upload');
+    const tabShare = document.getElementById('tab-share');
+    const tabUploadContent = document.getElementById('tab-upload-content');
+    const tabShareContent = document.getElementById('tab-share-content');
 
     let selectedFile = null;
+
+    // Tab switching logic
+    tabUpload.addEventListener('click', () => {
+        tabUpload.classList.add('active');
+        tabShare.classList.remove('active');
+        tabUploadContent.style.display = '';
+        tabShareContent.style.display = 'none';
+    });
+    tabShare.addEventListener('click', () => {
+        tabShare.classList.add('active');
+        tabUpload.classList.remove('active');
+        tabShareContent.style.display = '';
+        tabUploadContent.style.display = 'none';
+    });
+
+    // Prefill presignedUrl from query string if present
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('presigned_url')) {
+        presignedUrlInput.value = params.get('presigned_url');
+        if (presignedUrlShareInput) presignedUrlShareInput.value = params.get('presigned_url');
+        updateUploadButtonState();
+    }
 
     // Handle file selection
     fileInput.addEventListener('change', (e) => {
@@ -67,6 +96,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     presignedUrlInput.addEventListener('input', updateUploadButtonState);
+
+    // Generate sharable link (from Share tab)
+    generateLinkBtn.addEventListener('click', () => {
+        const url = presignedUrlShareInput.value.trim();
+        if (!url) {
+            sharableLinkInput.value = '';
+            sharableLinkInput.placeholder = 'Enter a presigned URL first';
+            return;
+        }
+        const base = window.location.origin + window.location.pathname;
+        const shareUrl = `${base}?presigned_url=${encodeURIComponent(url)}`;
+        sharableLinkInput.value = shareUrl;
+        sharableLinkInput.select();
+    });
 
     // Handle upload
     uploadBtn.addEventListener('click', handleUpload);

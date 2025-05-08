@@ -9,23 +9,41 @@
 <body>
     <div class="container">
         <h1>S3 File Uploader</h1>
-        <div class="upload-container">
-            <div class="form-group">
-                <label for="presignedUrl">Presigned URL:</label>
-                <input type="url" id="presignedUrl" placeholder="https://your-bucket.s3.amazonaws.com/..." required>
+        <div class="tab-container">
+            <button class="tab active" id="tab-upload" type="button">Upload to S3</button>
+            <button class="tab" id="tab-share" type="button">Generate Sharable Link</button>
+        </div>
+        <div id="tab-upload-content" class="tab-content">
+            <div class="upload-container">
+                <div class="form-group">
+                    <label for="presignedUrl">Presigned URL:</label>
+                    <input type="url" id="presignedUrl" placeholder="https://your-bucket.s3.amazonaws.com/..." required>
+                </div>
+                <div class="form-group">
+                    <label for="fileInput" class="file-upload-label">
+                        <span id="fileName">Choose a file or drag it here</span>
+                        <input type="file" id="fileInput" style="display: none;">
+                    </label>
+                </div>
+                <button id="uploadBtn" class="upload-btn" disabled>Upload to S3</button>
+                <div id="progressContainer" class="progress-container" style="display: none;">
+                    <div id="progressBar" class="progress-bar"></div>
+                    <span id="progressText">0%</span>
+                </div>
+                <div id="status" class="status"></div>
             </div>
-            <div class="form-group">
-                <label for="fileInput" class="file-upload-label">
-                    <span id="fileName">Choose a file or drag it here</span>
-                    <input type="file" id="fileInput" style="display: none;">
-                </label>
+        </div>
+        <div id="tab-share-content" class="tab-content" style="display:none;">
+            <div class="upload-container">
+                <div class="form-group">
+                    <label for="presignedUrlShare">Presigned URL:</label>
+                    <input type="url" id="presignedUrlShare" placeholder="https://your-bucket.s3.amazonaws.com/..." required>
+                </div>
+                <div class="form-group">
+                    <button id="generateLinkBtn" class="upload-btn" type="button">Generate Sharable Link</button>
+                    <input type="text" id="sharableLink" readonly placeholder="Sharable link will appear here" style="margin-top:8px;width:100%;">
+                </div>
             </div>
-            <button id="uploadBtn" class="upload-btn" disabled>Upload to S3</button>
-            <div id="progressContainer" class="progress-container" style="display: none;">
-                <div id="progressBar" class="progress-bar"></div>
-                <span id="progressText">0%</span>
-            </div>
-            <div id="status" class="status"></div>
         </div>
     </div>
     <script src="script.js"></script>
