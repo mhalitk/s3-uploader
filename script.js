@@ -130,23 +130,17 @@ document.addEventListener("DOMContentLoaded", () => {
     statusDiv.style.display = "none";
 
     try {
-      const response = await uploadFile(selectedFile, presignedUrl);
-      if (response.status >= 200 && response.status < 300) {
-        showStatus("File uploaded successfully!", "success");
-        resetForm();
-      } else {
-        let errorMessage = `Upload failed: ${response.status} ${response.statusText}`;
-        try {
-          const errorText = response.responseText || (await response.text());
-          errorMessage += ` - ${errorText}`;
-        } catch (e) {
-          console.error("Error reading error response:", e);
-        }
-        throw new Error(errorMessage);
-      }
+      await uploadFile(selectedFile, presignedUrl);
+      showStatus("File uploaded successfully!", "success");
+      resetForm();
     } catch (error) {
-      console.error("Upload error:", error);
-      showStatus(`Error: ${error.message}`, "error");
+      let errorMessage = `Upload failed`;
+      try {
+        errorMessage = error?.message || (await error?.text());
+      } catch (e) {
+        console.error("Error reading error response:", e);
+      }
+      showStatus(errorMessage, "error");
     } finally {
       uploadBtn.disabled = false;
     }
@@ -160,7 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
     while (attempt < maxAttempts) {
       attempt++;
       try {
-        // Show retry status if this is a retry
         if (attempt > 1) {
           showStatus(`Network error, retrying upload (attempt ${attempt} of ${maxAttempts})...`, "warning");
           await new Promise((res) => setTimeout(res, retryDelayMs * attempt));
@@ -181,15 +174,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (xhr.status >= 200 && xhr.status < 300) {
               resolve(xhr);
             } else {
-              // HTTP error, don't retry
               const error = new Error(`Upload failed with status ${xhr.status}`);
               error.status = xhr.status;
-              error.responseText = xhr.responseText;
               reject(error);
             }
           };
           xhr.onerror = () => {
-            // Only retry for network errors
             reject(new Error("Network error during upload"));
           };
           xhr.onabort = () => {
@@ -201,18 +191,17 @@ document.addEventListener("DOMContentLoaded", () => {
             reject(error);
           }
         });
-        // If we get here, upload succeeded
         return;
       } catch (error) {
         lastError = error;
-        // Only retry on network errors
+        if (error?.status === 403) {
+          error.message = "Upload failed: Access Denied";
+        }
         if (error.message !== "Network error during upload" || attempt >= maxAttempts) {
           throw error;
         }
-        // Otherwise, loop for retry
       }
     }
-    // If we get here, all attempts failed
     throw lastError;
   }
 
