@@ -9,6 +9,14 @@
 <body>
     <div class="container">
         <h1>S3 File Uploader</h1>
+        <div class="description">
+            <p>This web application lets you upload files directly to an Amazon S3 bucket using presigned URLs—no backend server required.</p>
+            <ul>
+                <li><strong>Upload to S3</strong>: Paste your presigned <em>PUT</em> URL, select or drag a file, and click <em>Upload</em> to send the file to S3.</li>
+                <li><strong>Generate Sharable Link</strong>: If you already have a presigned URL and need to share it, paste it here and click <em>Generate Sharable Link</em>. You’ll get a link that opens this app with the URL prefilled for easy uploading.</li>
+            </ul>
+            <p>Make sure your S3 bucket’s CORS settings and IAM permissions allow these operations.</p>
+        </div>
         <div class="tab-container">
             <button class="tab active" id="tab-upload" type="button">Upload to S3</button>
             <button class="tab" id="tab-share" type="button">Generate Sharable Link</button>

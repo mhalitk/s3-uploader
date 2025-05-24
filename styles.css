@@ -13,6 +13,14 @@ body {
     padding: 2rem;
 }
 
+.description {
+    background-color: #fff;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
 h1 {
     text-align: center;
     color: #2c3e50;
